@@ -2,7 +2,7 @@
 
 A high performance concurrent hash table for pesistent memory.
 
-# Directory
+## Directory
 
 `CCEH-PMDK`: source code of the implementation of CCEH.
 
@@ -20,13 +20,14 @@ A high performance concurrent hash table for pesistent memory.
 
 `testbench`: all the benchmark scripts used in the papar.
 
-# Configuration
+## Configuration
 
-mount your Pmem device to `/mnt/pmem` directory with DAX mode. For example, `sudo mount -o dax /dev/pmem0 /mnt/pmem`
+mount your Pmem device to `/mnt/pmem` directory with DAX mode.
 
+For example, `sudo mount -o dax /dev/pmem0 /mnt/pmem`
 install gflags to run test benchmark
 
-```
+```bash
 # packages
 sudo apt install libgflags-dev g++-10 gcc-10
 sudo apt reinstall g++
@@ -38,19 +39,21 @@ bash buildall.sh
 sudo bash config_cpu_performance_mode.sh
 ```
 
-# Run benchmarks
+## Setup
+
+git clone `this-repo`.
+
+git submodule update --init --recursive.
+
+## Run benchmarks
 
 Go to folder `testbench`, and run the script start with `testbench_*.sh`
 
 For example:
 
-```
+```bash
 cd testbench
-
 sudo bash testbench_scalability.sh
-
 ```
 
 You may modify the number of threads in the scripts to match the CPU cores in your server.
-
-

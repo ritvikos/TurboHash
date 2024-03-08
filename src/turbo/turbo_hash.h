@@ -34,7 +34,7 @@
 
 #include <error.h>
 #include <immintrin.h>
-#include <jemalloc/jemalloc.h>
+// #include <jemalloc/jemalloc.h>
 #include <mmintrin.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -49,7 +49,7 @@
 #include <cstring>
 #include <deque>
 #include <functional>
-#include <iomanip>
+// #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -71,17 +71,17 @@ static constexpr int kTurboProbeStep = 1;
 #define TURBO_LIKELY(x) (__builtin_expect (!!(x), 1))
 #define TURBO_UNLIKELY(x) (__builtin_expect (!!(x), 0))
 
-#define TURBO_BARRIER() asm volatile("" : : : "memory") /* Compile read-write barrier */
-#define TURBO_CPU_RELAX()                                                     \
-    asm volatile("pause\n"                                                    \
-                 :                                                            \
-                 :                                                            \
-                 : "memory") /* Pause instruction to prevent excess processor \
-                                bus usage */
+#define TURBO_BARRIER() asm volatile ("" : : : "memory") /* Compile read-write barrier */
+#define TURBO_CPU_RELAX()                                                      \
+    asm volatile ("pause\n"                                                    \
+                  :                                                            \
+                  :                                                            \
+                  : "memory") /* Pause instruction to prevent excess processor \
+                                 bus usage */
 
 #define TURBO_SPINLOCK_FREE ((0))
 
-inline void TURBO_COMPILER_FENCE () { asm volatile("" : : : "memory"); /* Compiler fence. */ }
+inline void TURBO_COMPILER_FENCE () { asm volatile ("" : : : "memory"); /* Compiler fence. */ }
 
 namespace turbo {
 
@@ -1550,9 +1550,11 @@ public:
             char* cell_addr = bucket_addr_ + cell_i_ * CellMeta::CellSize ();
             HashSlot* slot = CellMeta::LocateSlot (cell_addr, slot_index);
             H2Tag H2 = *CellMeta::LocateH2Tag (cell_addr, slot_index);
-            return {{bi_ /* ignore bucket index */, cell_i_ /* cell index */,
-                     *bitmap_ /* slot index*/, static_cast<H1Tag> (slot->H1), H2, false, 0},
-                    *slot};
+
+            return InfoPair{
+                SlotInfo{bi_, cell_i_, *bitmap_, static_cast<H1Tag> (slot->H1), H2, false, 0},
+                SlotType{},
+            };
         }
 
         inline bool valid () { return cell_i_ < cell_count_ && (bitmap_ ? true : false); }
